@@ -1,104 +1,104 @@
-[🇬🇧 English](README.en.md)
+[🇪🇸 Español](README.es.md)
 
 <div align="center">
   <br/>
-  <img src="cirno/assets/cirno.png" width="180" alt="Icono de Cirno" />
+  <img src="cirno/assets/cirno.png" width="180" alt="Cirno icon" />
 
 # Cirno
 
-**チルノ · Estados de cuenta en PDF convertidos a Excel, con estética Komi.**
+**チルノ · PDF account statements turned into Excel, with the Komi look.**
 
 <br/>
 
 ![Windows 10/11](https://img.shields.io/badge/windows-10%2F11%20x64-0078d4?style=for-the-badge&logo=windows&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3.11%2B-3776ab?style=for-the-badge&logo=python&logoColor=white)
 ![Qt](https://img.shields.io/badge/qt-pyside6-41cd52?style=for-the-badge&logo=qt&logoColor=white)
-![Licencia Apache 2.0](https://img.shields.io/badge/licencia-Apache%202.0-1b150d?style=for-the-badge)
+![Apache 2.0 license](https://img.shields.io/badge/license-Apache%202.0-1b150d?style=for-the-badge)
 
 <br/>
 
-[![Descargar instalador](https://img.shields.io/github/v/release/Chidaruma696/Cirno?label=%E2%AC%87%EF%B8%8F%20DESCARGAR%20INSTALADOR&style=for-the-badge&color=2e7de9)](https://github.com/Chidaruma696/Cirno/releases/latest)
+[![Download installer](https://img.shields.io/github/v/release/Chidaruma696/Cirno?label=%E2%AC%87%EF%B8%8F%20DOWNLOAD%20INSTALLER&style=for-the-badge&color=2e7de9)](https://github.com/Chidaruma696/Cirno/releases/latest)
 
 <br/>
 
-*Arrastra los PDF, pulsa Convertir y listo · todo en tu equipo · sin subir nada a ningún sitio*
+*Drag the PDFs, press Convert, done · everything on your machine · nothing uploaded anywhere*
 
 </div>
 
 ---
 
 > [!IMPORTANT]
-> **Cirno no envía nada a ningún sitio.** Lee los PDF en tu equipo y escribe los Excel donde le digas.
-> Los estados de cuenta contienen datos personales: el repositorio ignora `*.pdf` y `*.xlsx` para que nunca acaben en git por accidente.
+> **Cirno sends nothing anywhere.** It reads the PDFs on your machine and writes the Excel files where you tell it to.
+> Statements contain personal data: the repository ignores `*.pdf` and `*.xlsx` so they never end up in git by accident.
 
 <br/>
 
-## 📲 Descargar
+## 📲 Download
 
-1. Entra en la [última versión](https://github.com/Chidaruma696/Cirno/releases/latest) y baja `Cirno-x.y.z-setup.exe`.
-2. Ejecútalo. Se instala para tu usuario sin pedir permisos de administrador (o para todos los usuarios, si lo eliges). No necesita Python ni nada más.
-3. Abre Cirno desde el menú Inicio. Las versiones siguientes se instalan encima.
+1. Open the [latest release](https://github.com/Chidaruma696/Cirno/releases/latest) and grab `Cirno-x.y.z-setup.exe`.
+2. Run it. It installs per user without asking for administrator rights (or for all users, if you choose so). No Python or anything else required.
+3. Open Cirno from the Start menu. Later versions install on top.
 
 <br/>
 
-## ❄️ Qué hace
+## ❄️ What it does
 
-| Entrada | Salida | Cómo |
+| Input | Output | How |
 | --- | --- | --- |
-| Estados de cuenta en PDF del formato **Bachoco** (`EdoCta-…pdf`), uno o muchos | Un `.xlsx` por PDF, o un solo libro con todo | Arrastra los PDF a la ventana y pulsa **CONVERTIR** |
+| PDF account statements in the **Bachoco** format (`EdoCta-…pdf`), one or many | One `.xlsx` per PDF, or a single workbook with everything | Drag the PDFs onto the window and press **CONVERTIR** |
 
-Cada libro trae cuatro hojas, con fechas y montos como valores reales (no texto), filtros y encabezado fijo:
+Every workbook has four sheets, with dates and amounts as real values (not text), filters and a frozen header:
 
-- **Resumen**: cuenta, razón social, sociedad, periodo, fecha de emisión y el bloque RESUMEN (saldo inicial, compras, cargos, pagos, bonificaciones, cancelaciones, saldo final).
-- **Movimientos**: fecha, tipo (saldo inicial / cargo / abono / aplicación), referencia, asignación, cargos, abonos, saldo final y el detalle de aplicación de cada pago, igual que en el PDF.
-- **Aplicaciones**: el detalle de aplicación en formato plano (fecha y referencia del pago, importe aplicado, nota de crédito, documento aplicado), listo para tablas dinámicas.
-- **Saldo final**: los documentos pendientes con vencimiento, cargo, abono, saldo y descripción.
+- **Resumen**: account, customer, company, period, issue date and the RESUMEN block (opening balance, purchases, charges, payments, allowances, cancellations, closing balance).
+- **Movimientos**: date, type (opening balance / charge / credit / application), reference, assignment, charges, credits, running balance and the application detail of each payment, just like the PDF.
+- **Aplicaciones**: the application detail as a flat table (payment date and reference, applied amount, credit note, applied document), ready for pivot tables.
+- **Saldo final**: outstanding documents with due date, charge, credit, balance and description.
 
-Las filas **CIFRAS CONTROL** del PDF se copian como totales y, además, Cirno suma por su cuenta cargos, abonos y pagos aplicados y avisa si algo no cuadra (hoja **Avisos**). Los montos con guion final (`25,000.42-`) se convierten en negativos.
+The PDF's **CIFRAS CONTROL** rows are copied as totals and, on top of that, Cirno adds up charges, credits and applied payments on its own and warns if anything does not match (**Avisos** sheet). Amounts with a trailing dash (`25,000.42-`) become negative numbers.
 
-Si le das un PDF que no es de este formato, no se queda callado: vuelca las tablas que encuentre (o el texto línea a línea) en un Excel y lo marca como aviso.
-
-<br/>
-
-## ⚙️ Cómo funciona
-
-El PDF no contiene tablas de verdad, solo texto colocado en coordenadas. Cirno lee cada palabra con su posición ([pdfplumber](https://github.com/jsvine/pdfplumber)), agrupa por renglón, reparte cada palabra en su columna según la posición horizontal (calibrada con varios estados de cuenta) y reconoce las secciones por sus títulos: `RESUMEN`, `Movimientos del periodo`, `Detalles de Saldo Final`, `CIFRAS CONTROL`. No depende de la fila de encabezados, porque en algunos PDF el extractor no la devuelve. Un renglón con fecha es un movimiento; un renglón sin fecha pero con importe en «Pago» es la aplicación del movimiento anterior. Las tablas que saltan de página se siguen sin problema.
-
-El Excel lo escribe [openpyxl](https://openpyxl.readthedocs.io/). La ventana es Qt ([PySide6](https://doc.qt.io/qtforpython-6/)) con la estética Komi: papel y tinta, esquinas rectas, sombras duras, paleta hielo.
+Given a PDF in some other format, it does not stay silent: it dumps whatever tables it finds (or the text line by line) into an Excel file and flags it as a warning.
 
 <br/>
 
-## ⌨️ Línea de comandos
+## ⚙️ How it works
 
-El mismo ejecutable (o `python -m cirno`) acepta argumentos:
+The PDF has no real tables, only text placed at coordinates. Cirno reads every word with its position ([pdfplumber](https://github.com/jsvine/pdfplumber)), groups words into rows, assigns each word to a column by its horizontal position (calibrated with several statements) and detects sections by their titles: `RESUMEN`, `Movimientos del periodo`, `Detalles de Saldo Final`, `CIFRAS CONTROL`. It does not rely on the header row, since some PDFs do not return it to the extractor. A row with a date is a movement; a row without a date but with an amount under "Pago" is an application of the previous movement. Tables spanning pages are followed seamlessly.
+
+Excel files are written by [openpyxl](https://openpyxl.readthedocs.io/). The window is Qt ([PySide6](https://doc.qt.io/qtforpython-6/)) with the Komi look: paper and ink, square corners, hard shadows, ice palette. The interface is in Spanish.
+
+<br/>
+
+## ⌨️ Command line
+
+The same executable (or `python -m cirno`) takes arguments:
 
 ```
-Cirno.exe EdoCta-1.pdf EdoCta-2.pdf          # abre la ventana con esos PDF ya cargados
-Cirno.exe --cli C:\estados\ -o C:\salida     # convierte todos los PDF de la carpeta, sin ventana
-Cirno.exe --cli *.pdf --unir -n trimestre.xlsx
+Cirno.exe EdoCta-1.pdf EdoCta-2.pdf          # opens the window with those PDFs preloaded
+Cirno.exe --cli C:\statements\ -o C:\out     # converts every PDF in the folder, no window
+Cirno.exe --cli *.pdf --unir -n quarter.xlsx
 ```
 
-| Opción | Efecto |
+| Option | Effect |
 | --- | --- |
-| `-o CARPETA` | Carpeta de salida (por defecto, junto a cada PDF) |
-| `-u`, `--unir` | Un solo Excel con todos los estados; cada fila lleva archivo, cuenta y periodo |
-| `-n ARCHIVO.xlsx` | Nombre del Excel unido |
-| `--cli` | Convertir sin abrir la ventana |
+| `-o FOLDER` | Output folder (default: next to each PDF) |
+| `-u`, `--unir` | One workbook with every statement; each row carries file, account and period |
+| `-n FILE.xlsx` | Name of the merged workbook |
+| `--cli` | Convert without opening the window |
 
 <br/>
 
-## 🛠️ Compilar
+## 🛠️ Build
 
-Necesitas Python 3.11 o superior y, para el instalador, [Inno Setup 6](https://jrsoftware.org/isdl.php).
+You need Python 3.11+ and, for the installer, [Inno Setup 6](https://jrsoftware.org/isdl.php).
 
 ```powershell
 git clone https://github.com/Chidaruma696/Cirno.git
 cd Cirno
-.\build.ps1                  # .venv + dependencias + PyInstaller + Inno Setup → dist\Cirno-X.Y.Z-setup.exe
-.\build.ps1 -SinInstalador   # solo dist\Cirno\Cirno.exe
+.\build.ps1                  # .venv + deps + PyInstaller + Inno Setup → dist\Cirno-X.Y.Z-setup.exe
+.\build.ps1 -SinInstalador   # only dist\Cirno\Cirno.exe
 ```
 
-Para desarrollar sin compilar:
+To develop without building:
 
 ```powershell
 python -m venv .venv
@@ -106,37 +106,37 @@ python -m venv .venv
 .\.venv\Scripts\python -m cirno
 ```
 
-Estructura:
+Layout:
 
 ```
-cirno/parser.py     PDF → EstadoCuenta (columnas por posición, secciones por título, validación)
-cirno/excel.py      EstadoCuenta → .xlsx (hojas, formatos, totales)
-cirno/convertir.py  Orquestación: lotes, unir, respaldo genérico
-cirno/gui.py        Ventana PySide6 (arrastrar y soltar, hilo de trabajo, registro)
-cirno/theme.py      QSS Komi, paleta Cirno
-cirno/cli.py        Argumentos y punto de entrada
-cirno.spec          PyInstaller (carpeta, sin consola)
+cirno/parser.py     PDF → EstadoCuenta (columns by position, sections by title, validation)
+cirno/excel.py      EstadoCuenta → .xlsx (sheets, formats, totals)
+cirno/convertir.py  Orchestration: batches, merge, generic fallback
+cirno/gui.py        PySide6 window (drag and drop, worker thread, log)
+cirno/theme.py      Komi QSS, Cirno palette
+cirno/cli.py        Arguments and entry point
+cirno.spec          PyInstaller (one folder, no console)
 installer/Cirno.iss Inno Setup
-build.ps1           Todo lo anterior en un paso
+build.ps1           All of the above in one step
 ```
 
 <br/>
 
-## 🗺️ Hoja de ruta
+## 🗺️ Roadmap
 
-- [ ] Más formatos de estado de cuenta y factura (cada formato es un módulo de columnas y títulos).
-- [ ] Exportar también a CSV.
-- [ ] Tema oscuro.
+- [ ] More statement and invoice formats (each format is a module of columns and titles).
+- [ ] CSV export.
+- [ ] Dark theme.
 
 <br/>
 
 ## ⚖️ Legal
 
-Cirno es software libre bajo la licencia [Apache 2.0](LICENSE). Los componentes de terceros y sus licencias están en [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Cirno is free software under the [Apache 2.0](LICENSE) license. Third-party components and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-Bachoco es una marca de Industrias Bachoco, S.A.B. de C.V.; Cirno no tiene relación con la empresa, solo lee el formato de sus estados de cuenta.
+Bachoco is a trademark of Industrias Bachoco, S.A.B. de C.V.; Cirno is not related to the company, it only reads the format of its statements.
 
-Touhou Project y sus personajes pertenecen a Team Shanghai Alice (ZUN); obra de fans no oficial hecha según sus directrices para obras derivadas, sin afiliación ni respaldo.
+Touhou Project and its characters belong to Team Shanghai Alice (ZUN); unofficial fan work made under their guidelines for derivative works, with no affiliation or endorsement.
 
 <br/>
 
