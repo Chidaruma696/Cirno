@@ -1,0 +1,12 @@
+# Entorno y compilación
+.venv/
+build/
+dist/
+__pycache__/
+*.pyc
+*.egg-info/
+installer/Output/
+
+# Datos: los estados de cuenta y los Excel llevan datos personales. Nunca al repo.
+*.pdf
+*.xlsx
