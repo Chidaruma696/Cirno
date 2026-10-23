@@ -1,38 +1,50 @@
-[English](README.en.md) · **Español**
+[🇬🇧 English](README.en.md)
 
-<p align="center">
-  <img src="cirno/assets/cirno.png" width="128" alt="Cirno">
-</p>
+<div align="center">
+  <br/>
+  <img src="cirno/assets/cirno.png" width="180" alt="Icono de Cirno" />
 
-<h1 align="center">Cirno <sub>チルノ</sub></h1>
+# Cirno
 
-<p align="center">
-  <b>Estados de cuenta en PDF → Excel.</b> Arrastra, convierte, listo.
-</p>
+**チルノ · Estados de cuenta en PDF convertidos a Excel, con estética Komi.**
 
-<p align="center">
-  <img alt="Windows" src="https://img.shields.io/badge/Windows%2010%2F11-x64-2E7DE9?style=flat-square">
-  <img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-10233A?style=flat-square">
-  <img alt="Qt" src="https://img.shields.io/badge/Qt-PySide6-10233A?style=flat-square">
-  <img alt="Licencia" src="https://img.shields.io/badge/licencia-Apache%202.0-10233A?style=flat-square">
-</p>
+<br/>
 
-<p align="center">
-  <a href="https://github.com/Chidaruma696/Cirno/releases/latest">
-    <img alt="Descargar instalador" src="https://img.shields.io/badge/⬇️%20DESCARGAR%20INSTALADOR-Cirno--setup.exe-2E7DE9?style=for-the-badge">
-  </a>
-</p>
+![Windows 10/11](https://img.shields.io/badge/windows-10%2F11%20x64-0078d4?style=for-the-badge&logo=windows&logoColor=white)
+![Python](https://img.shields.io/badge/python-3.11%2B-3776ab?style=for-the-badge&logo=python&logoColor=white)
+![Qt](https://img.shields.io/badge/qt-pyside6-41cd52?style=for-the-badge&logo=qt&logoColor=white)
+![Licencia Apache 2.0](https://img.shields.io/badge/licencia-Apache%202.0-1b150d?style=for-the-badge)
+
+<br/>
+
+[![Descargar instalador](https://img.shields.io/github/v/release/Chidaruma696/Cirno?label=%E2%AC%87%EF%B8%8F%20DESCARGAR%20INSTALADOR&style=for-the-badge&color=2e7de9)](https://github.com/Chidaruma696/Cirno/releases/latest)
+
+<br/>
+
+*Arrastra los PDF, pulsa Convertir y listo · todo en tu equipo · sin subir nada a ningún sitio*
+
+</div>
 
 ---
 
-## Descargar
+> [!IMPORTANT]
+> **Cirno no envía nada a ningún sitio.** Lee los PDF en tu equipo y escribe los Excel donde le digas.
+> Los estados de cuenta contienen datos personales: el repositorio ignora `*.pdf` y `*.xlsx` para que nunca acaben en git por accidente.
 
-Baja `Cirno-X.Y.Z-setup.exe` de la [última release](https://github.com/Chidaruma696/Cirno/releases/latest) y ejecútalo. Se instala para tu usuario sin pedir permisos de administrador (o para todos los usuarios, si lo eliges). No necesita Python ni nada más instalado.
+<br/>
 
-## Qué es
+## 📲 Descargar
+
+1. Entra en la [última versión](https://github.com/Chidaruma696/Cirno/releases/latest) y baja `Cirno-x.y.z-setup.exe`.
+2. Ejecútalo. Se instala para tu usuario sin pedir permisos de administrador (o para todos los usuarios, si lo eliges). No necesita Python ni nada más.
+3. Abre Cirno desde el menú Inicio. Las versiones siguientes se instalan encima.
+
+<br/>
+
+## ❄️ Qué hace
 
 | Entrada | Salida | Cómo |
-|---|---|---|
+| --- | --- | --- |
 | Estados de cuenta en PDF del formato **Bachoco** (`EdoCta-…pdf`), uno o muchos | Un `.xlsx` por PDF, o un solo libro con todo | Arrastra los PDF a la ventana y pulsa **CONVERTIR** |
 
 Cada libro trae cuatro hojas, con fechas y montos como valores reales (no texto), filtros y encabezado fijo:
@@ -46,13 +58,17 @@ Las filas **CIFRAS CONTROL** del PDF se copian como totales y, además, Cirno su
 
 Si le das un PDF que no es de este formato, no se queda callado: vuelca las tablas que encuentre (o el texto línea a línea) en un Excel y lo marca como aviso.
 
-## Cómo funciona
+<br/>
+
+## ⚙️ Cómo funciona
 
 El PDF no contiene tablas de verdad, solo texto colocado en coordenadas. Cirno lee cada palabra con su posición ([pdfplumber](https://github.com/jsvine/pdfplumber)), agrupa por renglón, reparte cada palabra en su columna según la posición horizontal (calibrada con varios estados de cuenta) y reconoce las secciones por sus títulos: `RESUMEN`, `Movimientos del periodo`, `Detalles de Saldo Final`, `CIFRAS CONTROL`. No depende de la fila de encabezados, porque en algunos PDF el extractor no la devuelve. Un renglón con fecha es un movimiento; un renglón sin fecha pero con importe en «Pago» es la aplicación del movimiento anterior. Las tablas que saltan de página se siguen sin problema.
 
 El Excel lo escribe [openpyxl](https://openpyxl.readthedocs.io/). La ventana es Qt ([PySide6](https://doc.qt.io/qtforpython-6/)) con la estética Komi: papel y tinta, esquinas rectas, sombras duras, paleta hielo.
 
-### Línea de comandos
+<br/>
+
+## ⌨️ Línea de comandos
 
 El mismo ejecutable (o `python -m cirno`) acepta argumentos:
 
@@ -63,13 +79,15 @@ Cirno.exe --cli *.pdf --unir -n trimestre.xlsx
 ```
 
 | Opción | Efecto |
-|---|---|
+| --- | --- |
 | `-o CARPETA` | Carpeta de salida (por defecto, junto a cada PDF) |
 | `-u`, `--unir` | Un solo Excel con todos los estados; cada fila lleva archivo, cuenta y periodo |
 | `-n ARCHIVO.xlsx` | Nombre del Excel unido |
 | `--cli` | Convertir sin abrir la ventana |
 
-## Compilar
+<br/>
+
+## 🛠️ Compilar
 
 Necesitas Python 3.11 o superior y, para el instalador, [Inno Setup 6](https://jrsoftware.org/isdl.php).
 
@@ -102,20 +120,28 @@ installer/Cirno.iss Inno Setup
 build.ps1           Todo lo anterior en un paso
 ```
 
-## Hoja de ruta
+<br/>
 
-- [ ] Más formatos de estado de cuenta / factura (cada formato es un módulo de columnas y títulos).
+## 🗺️ Hoja de ruta
+
+- [ ] Más formatos de estado de cuenta y factura (cada formato es un módulo de columnas y títulos).
 - [ ] Exportar también a CSV.
 - [ ] Tema oscuro.
 
-## Legal
+<br/>
+
+## ⚖️ Legal
 
 Cirno es software libre bajo la licencia [Apache 2.0](LICENSE). Los componentes de terceros y sus licencias están en [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-Cirno procesa los PDF **en tu equipo**: no sube nada a ningún sitio. Los estados de cuenta contienen datos personales; el repositorio ignora `*.pdf` y `*.xlsx` para que no acaben en git por accidente.
 
 Bachoco es una marca de Industrias Bachoco, S.A.B. de C.V.; Cirno no tiene relación con la empresa, solo lee el formato de sus estados de cuenta.
 
 Touhou Project y sus personajes pertenecen a Team Shanghai Alice (ZUN); obra de fans no oficial hecha según sus directrices para obras derivadas, sin afiliación ni respaldo.
 
-<p align="center"><b>チルノ</b></p>
+<br/>
+
+<div align="center">
+
+チルノ
+
+</div>
