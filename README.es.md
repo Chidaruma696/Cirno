@@ -45,7 +45,7 @@
 
 | Entrada | Salida | Cómo |
 | --- | --- | --- |
-| Estados de cuenta en PDF del formato **Bachoco** (`EdoCta-…pdf`), uno o muchos | Un `.xlsx` por PDF, o un solo libro con todo | Arrastra los PDF a la ventana y pulsa **CONVERTIR** |
+| Estados de cuenta de proveedor en PDF (`EdoCta-…pdf`, el formato típico de SAP con RESUMEN / Movimientos / Saldo final / CIFRAS CONTROL), uno o muchos | Un `.xlsx` por PDF, o un solo libro con todo | Arrastra los PDF a la ventana y pulsa **CONVERTIR** |
 
 Cada libro trae cuatro hojas, con fechas y montos como valores reales (no texto), filtros y encabezado fijo:
 
@@ -133,8 +133,6 @@ build.ps1           Todo lo anterior en un paso
 ## ⚖️ Legal
 
 Cirno es software libre bajo la licencia [Apache 2.0](LICENSE). Los componentes de terceros y sus licencias están en [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-Bachoco es una marca de Industrias Bachoco, S.A.B. de C.V.; Cirno no tiene relación con la empresa, solo lee el formato de sus estados de cuenta.
 
 Touhou Project y sus personajes pertenecen a Team Shanghai Alice (ZUN); obra de fans no oficial hecha según sus directrices para obras derivadas, sin afiliación ni respaldo.
 

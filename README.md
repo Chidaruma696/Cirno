@@ -45,7 +45,7 @@
 
 | Input | Output | How |
 | --- | --- | --- |
-| PDF account statements in the **Bachoco** format (`EdoCta-…pdf`), one or many | One `.xlsx` per PDF, or a single workbook with everything | Drag the PDFs onto the window and press **CONVERTIR** |
+| Supplier account statements in PDF (`EdoCta-…pdf`, the common SAP layout with RESUMEN / Movimientos / Saldo final / CIFRAS CONTROL), one or many | One `.xlsx` per PDF, or a single workbook with everything | Drag the PDFs onto the window and press **CONVERTIR** |
 
 Every workbook has four sheets, with dates and amounts as real values (not text), filters and a frozen header:
 
@@ -133,8 +133,6 @@ build.ps1           All of the above in one step
 ## ⚖️ Legal
 
 Cirno is free software under the [Apache 2.0](LICENSE) license. Third-party components and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
-Bachoco is a trademark of Industrias Bachoco, S.A.B. de C.V.; Cirno is not related to the company, it only reads the format of its statements.
 
 Touhou Project and its characters belong to Team Shanghai Alice (ZUN); unofficial fan work made under their guidelines for derivative works, with no affiliation or endorsement.
 

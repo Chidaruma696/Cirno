@@ -1,4 +1,4 @@
-"""Lectura de estados de cuenta en PDF (formato Bachoco) a estructuras de Python.
+"""Lectura de estados de cuenta de proveedor en PDF a estructuras de Python.
 
 El PDF no trae tablas "reales": solo texto colocado en coordenadas. Las columnas se
 reconocen por la posición X de cada palabra (calibrada con varios estados de cuenta
