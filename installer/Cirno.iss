@@ -50,3 +50,19 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+; El actualizador de Cirno lanza este instalador con /SILENT /RELAUNCH después de cerrarse: al acabar se vuelve a abrir.
+Filename: "{app}\{#MyAppExeName}"; Flags: nowait; Check: Relaunch
+
+[Code]
+function Relaunch(): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 1 to ParamCount do
+    if CompareText(ParamStr(I), '/RELAUNCH') = 0 then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;

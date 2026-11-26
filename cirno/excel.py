@@ -203,28 +203,3 @@ def guardar(estados: list[EstadoCuenta], ruta: str | Path, combinado: bool = Fal
     _hoja_avisos(wb, estados)
     wb.save(str(ruta))
     return ruta
-
-
-def guardar_generico(hojas: list[tuple[str, list[list[str]]]], ruta: str | Path) -> Path:
-    """Vuelca las tablas/texto de un PDF de formato desconocido, una hoja por tabla."""
-    ruta = Path(ruta)
-    ruta.parent.mkdir(parents=True, exist_ok=True)
-    wb = Workbook()
-    wb.remove(wb.active)
-    usados: set[str] = set()
-    for nombre, filas in hojas or [("Vacío", [])]:
-        nombre = nombre[:31]
-        base, k = nombre, 2
-        while nombre in usados:
-            nombre, k = f"{base[:28]} {k}", k + 1
-        usados.add(nombre)
-        ws = wb.create_sheet(nombre)
-        anchos: dict[int, int] = {}
-        for i, fila in enumerate(filas, start=1):
-            for j, valor in enumerate(fila, start=1):
-                ws.cell(row=i, column=j, value=valor)
-                anchos[j] = max(anchos.get(j, 0), len(valor or ""))
-        for j, ancho in anchos.items():
-            ws.column_dimensions[get_column_letter(j)].width = min(max(ancho + 2, 9), 60)
-    wb.save(str(ruta))
-    return ruta

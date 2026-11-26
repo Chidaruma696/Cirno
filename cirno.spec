@@ -18,9 +18,12 @@ a = Analysis(
 
 
 def _sobra(destino: str) -> bool:
-    """Lastre de Qt que una app de widgets no usa: OpenGL por software (20 MB) y traducciones."""
+    """Lastre de Qt que una app de widgets no usa: OpenGL por software (20 MB) y las traducciones
+    que no son la española (los botones de los diálogos)."""
     d = destino.replace("\\", "/").lower()
-    return "opengl32sw" in d or "/translations/" in d or d.startswith("numpy")
+    if "/translations/" in d:
+        return not d.endswith("qtbase_es.qm")
+    return "opengl32sw" in d or d.startswith("numpy")
 
 
 a.binaries = [b for b in a.binaries if not _sobra(b[0])]

@@ -4,10 +4,12 @@
 #   .\build.ps1                 # todo
 #   .\build.ps1 -SinInstalador  # solo dist\Cirno\Cirno.exe
 #   .\build.ps1 -Limpiar        # borra build\ y dist\ antes de empezar
+#   .\build.ps1 -Probar         # solo ejecuta las pruebas
 
 param(
     [switch]$SinInstalador,
-    [switch]$Limpiar
+    [switch]$Limpiar,
+    [switch]$Probar
 )
 
 $ErrorActionPreference = "Stop"
@@ -33,6 +35,11 @@ $python = ".\.venv\Scripts\python.exe"
 Write-Host "Instalando dependencias..."
 Invoke-Nativo "$python -m pip install --quiet --upgrade pip"
 Invoke-Nativo "$python -m pip install --quiet -r requirements.txt"
+
+if ($Probar) {
+    Invoke-Nativo "$python -m pytest -q"
+    exit 0
+}
 
 $version = (Select-String -Path "cirno\__init__.py" -Pattern '__version__\s*=\s*"([^"]+)"').Matches[0].Groups[1].Value
 Write-Host "Cirno ${version}: PyInstaller..."
@@ -60,4 +67,9 @@ if (-not $iscc) {
 Write-Host "Inno Setup..."
 Invoke-Nativo "`"$iscc`" /Q /DMyAppVersion=$version installer\Cirno.iss"
 
-Write-Host "Listo: dist\Cirno-$version-setup.exe"
+# El actualizador de Cirno comprueba el instalador contra este archivo, que se publica a su lado en la release.
+$instalador = "dist\Cirno-$version-setup.exe"
+$huella = (Get-FileHash $instalador -Algorithm SHA256).Hash.ToLower()
+Set-Content -Path "$instalador.sha256" -Value "$huella *Cirno-$version-setup.exe" -Encoding ascii -NoNewline
+
+Write-Host "Listo: $instalador (+ .sha256)"

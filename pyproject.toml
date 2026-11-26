@@ -1,7 +1,7 @@
 [project]
 name = "cirno"
 dynamic = ["version"]
-description = "Convierte estados de cuenta en PDF a Excel"
+description = "PDF suite for the office: merge, reorder and edit pages, extract tables and data, and work on Excel in plain words"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
@@ -9,8 +9,14 @@ authors = [{ name = "Chidaruma" }]
 dependencies = [
     "PySide6-Essentials>=6.7",
     "pdfplumber>=0.11",
+    "pypdfium2>=4.30",
+    "pikepdf>=9",
+    "Pillow>=10",
     "openpyxl>=3.1",
 ]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pyinstaller>=6.10"]
 
 [project.scripts]
 cirno = "cirno.cli:main"
@@ -33,3 +39,6 @@ include = ["cirno*"]
 
 [tool.setuptools.package-data]
 cirno = ["assets/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -145,8 +145,8 @@ def parse_date(text: str) -> date | None:
         return None
 
 
-def _rows(page) -> list[list[Word]]:
-    words = [Word(w["x0"], w["x1"], w["top"], w["text"]) for w in page.extract_words()]
+def _rows(palabras: list[dict]) -> list[list[Word]]:
+    words = [Word(w["x0"], w["x1"], w["top"], w["text"]) for w in palabras]
     words.sort(key=lambda w: (w.top, w.x0))
     rows: list[list[Word]] = []
     actual: list[Word] = []
@@ -224,11 +224,16 @@ def parse_pdf(path: str | Path) -> EstadoCuenta:
     with pdfplumber.open(str(path)) as pdf:
         for page in pdf.pages:
             scale = (page.width or PAGE_WIDTH_REF) / PAGE_WIDTH_REF
-            _leer_pagina(ec, _rows(page), scale)
+            leer_palabras(ec, page.extract_words(), scale)
     if not ec.movimientos and not ec.resumen and not ec.saldo_final:
         raise FormatoDesconocido(f"{path.name}: no parece un estado de cuenta de este formato")
-    _validar(ec)
+    validar(ec)
     return ec
+
+
+def leer_palabras(ec: EstadoCuenta, palabras: list[dict], scale: float = 1.0) -> None:
+    """Suma al estado de cuenta lo que haya en las palabras de una página (de `extract_words`)."""
+    _leer_pagina(ec, _rows(palabras), scale)
 
 
 def _leer_pagina(ec: EstadoCuenta, rows: list[list[Word]], scale: float) -> None:
@@ -292,7 +297,7 @@ def _leer_pagina(ec: EstadoCuenta, rows: list[list[Word]], scale: float) -> None
             ))
 
 
-def _validar(ec: EstadoCuenta) -> None:
+def validar(ec: EstadoCuenta) -> None:
     """Cruza las sumas de las tablas con las CIFRAS CONTROL del propio PDF."""
     def suma(valores) -> float:
         return round(sum(v for v in valores if v is not None), 2)
@@ -309,22 +314,3 @@ def _validar(ec: EstadoCuenta) -> None:
             continue
         if abs(calculado - control) > 0.005:
             ec.avisos.append(f"La suma de {nombre} ({calculado:,.2f}) no coincide con CIFRAS CONTROL ({control:,.2f})")
-
-
-# ----------------------------------------------------------------------------- respaldo genérico
-
-def extraer_generico(path: str | Path) -> list[tuple[str, list[list[str]]]]:
-    """Para PDF que no son de este formato: devuelve (nombre de hoja, filas) por página,
-    con las tablas que pdfplumber detecte o, si no hay, el texto línea a línea."""
-    hojas: list[tuple[str, list[list[str]]]] = []
-    with pdfplumber.open(str(path)) as pdf:
-        for i, page in enumerate(pdf.pages, start=1):
-            tablas = page.extract_tables() or []
-            if tablas:
-                for j, tabla in enumerate(tablas, start=1):
-                    filas = [[(c or "").replace("\n", " ").strip() for c in fila] for fila in tabla]
-                    hojas.append((f"P{i} tabla {j}", filas))
-            else:
-                texto = page.extract_text() or ""
-                hojas.append((f"P{i} texto", [[linea] for linea in texto.splitlines() if linea.strip()]))
-    return hojas
